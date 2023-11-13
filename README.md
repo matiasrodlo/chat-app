@@ -1,16 +1,14 @@
-# movil
+# chat app
+prototype chat app (2021)
 
-A new Flutter project.
+<p>
+  <a href="#">
+    <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/52969662/282579204-a206f852-5ae1-4f0b-b049-4dc6c0e29587.png" alt="vonvang-1">
+  </a>
+</p>
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p>
+  <a href="#">
+    <img src="https://github.com/matiasrodlo/chat-app/assets/52969662/f2023eac-e2f2-4413-bf3c-e496b7b34946" alt="vonvang-1">
+  </a>
+</p>
