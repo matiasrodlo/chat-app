@@ -94,24 +94,17 @@ class _WelcomeState extends State<Welcome>
 									child: Column(
 										children: [
 											WidgetButton(
-												text: 'Entrar',
-												color: Colors.white,
-												bgColor: Colors.transparent,
-												bordered: true,
-												callback: ()
-												{
+												text: 'Iniciar Sesión',
+												onPressed: () {
 													Navigator.pushNamed(context, '/login');
-												}
+												},
 											),
 											SizedBox(height: 15),
 											WidgetButton(
-												text: 'Crear Cuenta',
-												color: appColors.mainColors['blue'],
-												bordered: true,
-												callback: ()
-												{
+												text: 'Registrarse',
+												onPressed: () {
 													Navigator.pushNamed(context, '/register');
-												}
+												},
 											)
 										]
 									)
@@ -162,7 +155,7 @@ class CustomBackground extends CustomPainter
 	void paint(Canvas canvas, Size size)
 	{
 		var paint = Paint();
-		paint.color	= appColors.mainColors['lightBlue']; //Colors.blue;
+		paint.color = appColors.mainColors['lightBlue'] ?? Colors.blue[100]!;
 		paint.style	= PaintingStyle.fill;
 		paint.strokeWidth = 5;
 		
@@ -178,7 +171,7 @@ class CustomBackground extends CustomPainter
 		
 		//##blue line
 		var bpaint = Paint();
-		bpaint.color	= appColors.mainColors['blue']; //Colors.blue;
+		bpaint.color = appColors.mainColors['blue'] ?? Colors.blue;
 		bpaint.style	= PaintingStyle.fill;
 		bpaint.strokeWidth = 5;
 		

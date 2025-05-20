@@ -3,16 +3,22 @@ import 'dart:convert';
 
 class RequestException implements Exception
 {
-	int 			statusCode;
-	String			message;
-	http.Response	response;
+	final int statusCode;
+	final String message;
+	final http.Response response;
 	
-	RequestException(String message, http.Response response)
+	RequestException({
+		required this.statusCode,
+		required this.message,
+		required this.response,
+	});
+	
+	@override
+	String toString()
 	{
-		this.message	= message;
-		this.response	= response;
-		this.statusCode	= this.response.statusCode;
+		return 'RequestException: $message (Status Code: $statusCode)';
 	}
+	
 	Map<dynamic, dynamic> getErrorMap()
 	{
 		return json.decode(this.response.body);

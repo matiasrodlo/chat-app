@@ -1,61 +1,53 @@
 import 'package:flutter/material.dart';
+import '../colors.dart' as appColors;
 
-class WidgetButton extends StatelessWidget
-{
-	String text;
-	void Function()	callback;
-	String type 	= 'primary';
-	Widget			icon;
-	Color			color;
-	final bool			bordered;
-	final bgColor;
-	
-	WidgetButton({
-		this.text, Function() this.callback, 
-		this.type = 'primary', 
-		this.icon = null, 
-		this.color = null, 
+class WidgetButton extends StatelessWidget {
+	final String text;
+	final VoidCallback onPressed;
+	final Color? color;
+	final Color? backgroundColor;
+	final bool bordered;
+	final IconData? icon;
+	final double width;
+	final double height;
+
+	const WidgetButton({
+		Key? key,
+		required this.text,
+		required this.onPressed,
+		this.color,
+		this.backgroundColor,
 		this.bordered = false,
-		this.bgColor = Colors.white
-	});
-	
-	void _onTap()
-	{
-		if( this.callback != null )
-			this.callback();
-	}
+		this.icon,
+		this.width = 200,
+		this.height = 50,
+	}) : super(key: key);
+
 	@override
-	Widget build(BuildContext context)
-	{
-		dynamic btn_color = Colors.red;
-		
-		if( this.type == 'primary')
-			btn_color = Color(0xffff5c1e);
-		if( this.type == 'secondary')
-			btn_color = Colors.green;
-		else if( this.type == 'warning' )
-			btn_color = Colors.orange;
-		
-			
-		return InkWell(
-			onTap: this._onTap,
-			child: Container(
-				height: 50,
-				decoration: !this.bordered ? BoxDecoration(
-					color: this.color ?? btn_color,
-					//border: new Border.all(color: Colors.white, width:1),
-					borderRadius: BorderRadius.circular(25),
-				)
-				:
-				BoxDecoration(
-					color: this.bgColor,
-					border: new Border.all(color: this.color ?? btn_color, width:1),
-					borderRadius: BorderRadius.circular(25),
+	Widget build(BuildContext context) {
+		return Container(
+			width: width,
+			height: height,
+			child: ElevatedButton(
+				onPressed: onPressed,
+				style: ElevatedButton.styleFrom(
+					backgroundColor: backgroundColor ?? appColors.AppColors.mainColors['blue'],
+					side: bordered ? BorderSide(color: color ?? appColors.AppColors.mainColors['blue']!) : null,
+					shape: RoundedRectangleBorder(
+						borderRadius: BorderRadius.circular(8),
+					),
 				),
-				child: Center(
-					child: Text(this.text, style: TextStyle(fontSize: 18, color: this.bordered ? this.color ?? btn_color : Colors.white, fontWeight: FontWeight.bold))
-				)
-			)
+				child: Row(
+					mainAxisAlignment: MainAxisAlignment.center,
+					children: [
+						if (icon != null) ...[
+							Icon(icon),
+							SizedBox(width: 8),
+						],
+						Text(text),
+					],
+				),
+			),
 		);
 	}
 }

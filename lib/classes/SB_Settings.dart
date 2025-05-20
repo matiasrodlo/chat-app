@@ -11,10 +11,8 @@ class SB_Settings
 	}
 	static Future<String> getString(String key) async
 	{
-		var pref = await SharedPreferences.getInstance();
-		String value = pref.getString(key);
-		
-		return value;
+		final pref = await SharedPreferences.getInstance();
+		return pref.getString(key) ?? '';
 	}
 	static Future<void> setBool(String key, bool val) async
 	{
@@ -23,10 +21,8 @@ class SB_Settings
 	}
 	static Future<bool> getBool(String key) async
 	{
-		var pref = await SharedPreferences.getInstance();
-		bool value = pref.getBool(key);
-		
-		return value;
+		final pref = await SharedPreferences.getInstance();
+		return pref.getBool(key) ?? false;
 	}
 	static Future<void> saveObject(String key, Map<String, dynamic> obj) async
 	{

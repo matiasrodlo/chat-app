@@ -3,25 +3,25 @@ import '../colors.dart' as appColors;
 
 class WidgetHelper
 {
-	static TextStyle getTextFieldStyle()
+	static TextStyle getTitleStyle()
 	{
-		return TextStyle(color: appColors.mainColors['blue']);
+		return TextStyle(color: appColors.AppColors.mainColors['blue']);
 	}
-	static InputDecoration getTextFieldDecoration(String hint, [Color bgColor = Colors.transparent])
+	static InputDecoration getTextFieldDecoration(String label, [Color? color])
 	{
 		return InputDecoration(
-			labelText: hint,
+			labelText: label,
 			contentPadding: EdgeInsets.only(top:4, right: 10, bottom: 4, left: 10),
 			filled: true,
-			fillColor: bgColor,
+			fillColor: color,
 			//icon: Icon(Icons.supervisor_account, color: Colors.white),
-			hintText: hint,	
+			hintText: label,	
 			hintStyle: TextStyle(color: Colors.white),
 			focusedBorder: OutlineInputBorder(
 				borderRadius: BorderRadius.circular(10),
 				borderSide: BorderSide(
 					style: BorderStyle.solid,
-					color: appColors.mainColors['gray'].withOpacity(0.5),
+					color: (color ?? appColors.AppColors.mainColors['gray'])!.withOpacity(0.5),
 					//width: 0,
 				)
 			),
@@ -29,14 +29,21 @@ class WidgetHelper
 				borderRadius: BorderRadius.circular(10),
 				borderSide: BorderSide(
 					style: BorderStyle.solid,
-					color: appColors.mainColors['gray'].withOpacity(0.5),
+					color: (color ?? appColors.AppColors.mainColors['gray'])!.withOpacity(0.5),
 				)
 			),
 			border: OutlineInputBorder(
 				borderRadius: BorderRadius.circular(10),
 				borderSide: BorderSide(
 					style: BorderStyle.solid,
-					color: appColors.mainColors['gray'].withOpacity(0.5),
+					color: (color ?? appColors.AppColors.mainColors['gray'])!.withOpacity(0.5),
+				)
+			),
+			errorBorder: OutlineInputBorder(
+				borderRadius: BorderRadius.circular(10),
+				borderSide: BorderSide(
+					style: BorderStyle.solid,
+					color: (color ?? appColors.AppColors.mainColors['gray'])!.withOpacity(0.5),
 				)
 			)
 		);

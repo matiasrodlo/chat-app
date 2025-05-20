@@ -1,128 +1,89 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import '../services/service-user.dart';
-import '../classes/SB_Settings.dart';
-import '../colors.dart' as appColors;
-import '../widgets/button.dart';
-import '../widgets/chat/conversations.dart';
-import '../widgets/BottomMenu.dart';
-import '../helpers/WidgetHelper.dart';
+import '../classes/ChatMessage.dart';
+import '../services/lan_service.dart';
+import '../models/chat_message.dart';
+import 'chat_screen.dart';
 
-class Home extends StatefulWidget
-{
-	_HomeState	createState() => _HomeState();
+class HomePage extends StatefulWidget {
+	const HomePage({super.key});
+
+	@override
+	State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeState extends State<Home>
-{
-	String 		_title;
-	bool	_loaded	= false;
-	
+class _HomePageState extends State<HomePage> {
+	final _usernameController = TextEditingController();
+	final _lanService = LanService();
+	bool _isConnecting = false;
+
 	@override
-	void initState()
-	{
-		this._title = 'Hablaqui';
-		this._loadData();
+	void dispose() {
+		_usernameController.dispose();
+		super.dispose();
 	}
-	void _loadData() async
-	{
-		var user = await ServiceUsers().getCurrentUser();
-		print(user);
-		if( user != null )
-		{
-			this._title = 'Hola ' + user.name;
-		}
-		this.setState(()
-		{
-			this._loaded = true;
+
+	Future<void> _connect() async {
+		if (_usernameController.text.trim().isEmpty) return;
+		
+		setState(() {
+			_isConnecting = true;
 		});
-	}
-	@override
-	Widget build(BuildContext context)
-	{
-		return Scaffold(
-			appBar: AppBar(title: Text(this._title), elevation: 0,),
-			drawer: Drawer(
-				child: ListView(
-					children: [
-						DrawerHeader(
-							decoration: BoxDecoration(
-								color: Colors.white,
-							),
-							child: Center(
-								child: Image.asset('images/logo-text.png', fit: BoxFit.cover,),
-							)
-						),
-						ListTile(
-							title: Text('Cerrar Sesión'),
-							onTap: this._closeSession
-						)
-					]
-				)
-			),
-			body: Container(
-				color: appColors.mainColors['blue'],
-				child: Container(
-					//padding: EdgeInsets.all(10),
-					decoration: BoxDecoration(
-						
-						color: Colors.white,
-						borderRadius: BorderRadius.only(
-							topRight: Radius.circular(20),
-							topLeft: Radius.circular(20),
-						)
+
+		try {
+			await _lanService.connect(_usernameController.text.trim());
+			if (mounted) {
+				Navigator.of(context).pushReplacement(
+					MaterialPageRoute(
+						builder: (context) => const ChatScreen(),
 					),
-					child: Column(
-						children: [
-							Container(
-								padding: EdgeInsets.all(15),
-								child: TextFormField(
-									
-									decoration: WidgetHelper.getTextFieldDecoration('', appColors.mainColors['lightGray']).copyWith(
-										hintText: 'Buscar',
-										hintStyle: TextStyle(color: Color(0xffafafaf)),
-										prefixIcon: Icon(Icons.search, color: Color(0xffafafaf)),
-										focusedBorder: OutlineInputBorder(
-											borderRadius: BorderRadius.circular(10),
-											borderSide: BorderSide(
-												style: BorderStyle.solid,
-												color: appColors.mainColors['lightGray'],
-												//width: 0,
-											)
-										),
-										enabledBorder: OutlineInputBorder(
-											borderRadius: BorderRadius.circular(10),
-											borderSide: BorderSide(
-												style: BorderStyle.solid,
-												color: appColors.mainColors['lightGray'],
-											)
-										),
-										border: OutlineInputBorder(
-											borderRadius: BorderRadius.circular(10),
-											borderSide: BorderSide(
-												style: BorderStyle.solid,
-												color: appColors.mainColors['lightGray'],
-											)
-										)
-									),
-								)
-							),
-							SizedBox(height: 10),
-							Expanded(
-								child: Container(
-									padding: EdgeInsets.all(10),
-									child: this._loaded ? ChatConversations() : SizedBox(height: 0),
-								)
-							),
-							//BottomMenu(),
-						]
-					)
-				)
-			)
-		);
+				);
+			}
+		} catch (e) {
+			if (mounted) {
+				ScaffoldMessenger.of(context).showSnackBar(
+					SnackBar(content: Text('Failed to connect: $e')),
+				);
+			}
+		} finally {
+			if (mounted) {
+				setState(() {
+					_isConnecting = false;
+				});
+			}
+		}
 	}
-	void _closeSession() async
-	{
-		await ServiceUsers().closeSession();
-		Navigator.of(this.context).pushNamedAndRemoveUntil('/', (_) => false);
+
+	@override
+	Widget build(BuildContext context) {
+		return Scaffold(
+			appBar: AppBar(
+				title: const Text('LAN Chat'),
+			),
+			body: Padding(
+				padding: const EdgeInsets.all(16.0),
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.center,
+					children: [
+						TextField(
+							controller: _usernameController,
+							decoration: const InputDecoration(
+								labelText: 'Username',
+								border: OutlineInputBorder(),
+							),
+							textInputAction: TextInputAction.done,
+							onSubmitted: (_) => _connect(),
+						),
+						const SizedBox(height: 16),
+						ElevatedButton(
+							onPressed: _isConnecting ? null : _connect,
+							child: _isConnecting
+								? const CircularProgressIndicator()
+								: const Text('Join Chat'),
+						),
+					],
+				),
+			),
+		);
 	}
 }
