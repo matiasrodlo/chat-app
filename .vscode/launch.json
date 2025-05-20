@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "chat_app",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-port=8080",
+                "--web-hostname=0.0.0.0",
+                "--web-browser-flag=--disable-web-security"
+            ]
+        }
+    ]
+} 
