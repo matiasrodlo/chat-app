@@ -4,7 +4,6 @@ import '../classes/User.dart';
 import '../classes/Specialist.dart';
 import '../classes/Chat.dart';
 import '../classes/ChatMessage.dart';
-import 'websocket_service.dart';
 
 /// Local service that handles all data operations without external API dependencies
 class LocalService {
@@ -13,7 +12,6 @@ class LocalService {
   LocalService._internal();
 
   SharedPreferences? _prefs;
-  final WebSocketService _wsService = WebSocketService();
   static const String _userKey = 'user_data';
   static const String _messagesKey = 'chat_messages';
   static const String _chatsKey = 'chats';
@@ -53,9 +51,6 @@ class LocalService {
     // Store current user
     await saveUser(user);
     
-    // Connect to WebSocket
-    await _wsService.connect(user.id!);
-    
     return user;
   }
 
@@ -90,9 +85,6 @@ class LocalService {
     // Save as current user
     await saveUser(user);
     
-    // Connect to WebSocket
-    await _wsService.connect(user.id!);
-    
     return user;
   }
 
@@ -117,13 +109,7 @@ class LocalService {
     final List<String> messages = _prefs!.getStringList(key) ?? [];
     messages.add(jsonEncode(message.toMap()));
     await _prefs!.setStringList(key, messages);
-    
-    // Send message through WebSocket
-    _wsService.sendMessage(message);
   }
-
-  /// Get WebSocket message stream
-  Stream<ChatMessage> get messageStream => _wsService.messageStream;
 
   /// Specialist Methods
   Future<List<Specialist>> getSpecialists() async {
@@ -147,7 +133,6 @@ class LocalService {
   }
 
   Future<void> closeSession() async {
-    _wsService.disconnect();
     await _ensurePrefs();
     await _prefs!.remove(_userKey);
   }

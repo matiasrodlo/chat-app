@@ -90,9 +90,66 @@ class MyApp extends StatelessWidget
 			title: 'LAN Chat',
 			// Configure the app's theme
       theme: ThemeData(
-				colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
 				useMaterial3: true,
-      ),
+				colorScheme: ColorScheme.fromSeed(
+					seedColor: AppColors.mainColors['primary']!,
+					background: AppColors.mainColors['background']!,
+					surface: AppColors.mainColors['surface']!,
+					error: AppColors.mainColors['error']!,
+				),
+				appBarTheme: AppBarTheme(
+					backgroundColor: AppColors.mainColors['primary'],
+					foregroundColor: Colors.white,
+					elevation: 0,
+				),
+				elevatedButtonTheme: ElevatedButtonThemeData(
+					style: ElevatedButton.styleFrom(
+						backgroundColor: AppColors.mainColors['primary'],
+						foregroundColor: Colors.white,
+						padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+						shape: RoundedRectangleBorder(
+							borderRadius: BorderRadius.circular(12),
+						),
+					),
+				),
+				inputDecorationTheme: InputDecorationTheme(
+					filled: true,
+					fillColor: AppColors.mainColors['surface'],
+					border: OutlineInputBorder(
+						borderRadius: BorderRadius.circular(12),
+						borderSide: BorderSide(color: AppColors.mainColors['divider']!),
+					),
+					enabledBorder: OutlineInputBorder(
+						borderRadius: BorderRadius.circular(12),
+						borderSide: BorderSide(color: AppColors.mainColors['divider']!),
+					),
+					focusedBorder: OutlineInputBorder(
+						borderRadius: BorderRadius.circular(12),
+						borderSide: BorderSide(color: AppColors.mainColors['primary']!),
+					),
+					contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+				),
+				textTheme: TextTheme(
+					titleLarge: TextStyle(
+						color: AppColors.mainColors['text'],
+						fontSize: 24,
+						fontWeight: FontWeight.bold,
+					),
+					titleMedium: TextStyle(
+						color: AppColors.mainColors['text'],
+						fontSize: 20,
+						fontWeight: FontWeight.w600,
+					),
+					bodyLarge: TextStyle(
+						color: AppColors.mainColors['text'],
+						fontSize: 16,
+					),
+					bodyMedium: TextStyle(
+						color: AppColors.mainColors['textSecondary'],
+						fontSize: 14,
+					),
+				),
+			),
 			// Disable the debug banner in the top-right corner
 		debugShowCheckedModeBanner: false,
 			// Define all available routes in the application

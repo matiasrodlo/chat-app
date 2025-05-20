@@ -28,13 +28,17 @@ class AppColors {
 	);
 
 	static const Map<String, Color> mainColors = {
-		'blue': Color(0xFF2196F3),
-		'lightBlue': Color(0xFF64B5F6),
-		'darkBlue': Color(0xFF1976D2),
-		'gray': Color(0xFF757575),
-		'lightGray': Color(0xFFEEEEEE),
-		'white': Colors.white,
-		'black': Colors.black,
+		'primary': Color(0xFF2196F3),
+		'secondary': Color(0xFF03A9F4),
+		'accent': Color(0xFF00BCD4),
+		'background': Color(0xFFF5F5F5),
+		'surface': Colors.white,
+		'error': Color(0xFFE53935),
+		'success': Color(0xFF43A047),
+		'warning': Color(0xFFFFA000),
+		'text': Color(0xFF212121),
+		'textSecondary': Color(0xFF757575),
+		'divider': Color(0xFFBDBDBD),
 	};
 }
 

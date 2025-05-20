@@ -61,45 +61,49 @@ class LanService {
       
       _channel!.stream.listen(
         (message) {
-          final data = jsonDecode(message);
-          if (data['type'] == 'count') {
-            _peerCount = data['count'];
-            _peerCountController.add(_peerCount);
-          } else if (data['type'] == 'delivery') {
-            // Handle delivery confirmation
-            final messageId = data['messageId'];
-            if (_messages.containsKey(messageId)) {
-              final originalMessage = _messages[messageId]!;
-              if (originalMessage.status != MessageStatus.delivered) {
-                final updatedMessage = originalMessage.copyWith(status: MessageStatus.delivered);
-                _messages[messageId] = updatedMessage;
-                _messageController.add(updatedMessage);
+          try {
+            final data = jsonDecode(message);
+            if (data['type'] == 'count') {
+              _peerCount = data['count'];
+              _peerCountController.add(_peerCount);
+            } else if (data['type'] == 'delivery') {
+              // Handle delivery confirmation
+              final messageId = data['messageId'];
+              if (_messages.containsKey(messageId)) {
+                final originalMessage = _messages[messageId]!;
+                if (originalMessage.status != MessageStatus.delivered) {
+                  final updatedMessage = originalMessage.copyWith(status: MessageStatus.delivered);
+                  _messages[messageId] = updatedMessage;
+                  _messageController.add(updatedMessage);
+                }
+              }
+            } else if (data['type'] == 'history') {
+              // Handle message history
+              final messages = (data['messages'] as List)
+                  .map((m) => ChatMessage.fromJson(m))
+                  .toList();
+              for (var message in messages) {
+                if (!_messages.containsKey(message.id)) {
+                  _messages[message.id] = message;
+                  _messageController.add(message);
+                }
+              }
+            } else {
+              // Handle chat message
+              final chatMessage = ChatMessage.fromJson(data);
+              if (!_messages.containsKey(chatMessage.id)) {
+                _messages[chatMessage.id] = chatMessage;
+                _messageController.add(chatMessage);
               }
             }
-          } else if (data['type'] == 'history') {
-            // Handle message history
-            final messages = (data['messages'] as List)
-                .map((m) => ChatMessage.fromJson(m))
-                .toList();
-            for (var message in messages) {
-              if (!_messages.containsKey(message.id)) {
-                _messages[message.id] = message;
-                _messageController.add(message);
-              }
+            
+            // Update connection status to connected when we receive any message
+            if (!_isConnected) {
+              _isConnected = true;
+              _connectionStatusController.add(true);
             }
-          } else {
-            // Handle chat message
-            final chatMessage = ChatMessage.fromJson(data);
-            if (!_messages.containsKey(chatMessage.id)) {
-              _messages[chatMessage.id] = chatMessage;
-              _messageController.add(chatMessage);
-            }
-          }
-          
-          // Update connection status to connected when we receive any message
-          if (!_isConnected) {
-            _isConnected = true;
-            _connectionStatusController.add(true);
+          } catch (e) {
+            print('Error processing message: $e');
           }
         },
         onError: (error) {

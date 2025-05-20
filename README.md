@@ -50,23 +50,17 @@ flutter pub get
 
 3. Install Node.js dependencies:
 ```bash
-npm install
+npm install ws
 ```
 
-4. Start the WebSocket server:
-```bash
-node server.js
-```
-
-5. Run the Flutter app:
-```bash
-flutter run
-```
-
-Or use the provided script to run both server and client:
+4. Start the application:
 ```bash
 ./run_all.sh
 ```
+
+This script will:
+- Start the WebSocket server on port 8080
+- Launch the Flutter web app in Chrome
 
 ## Development
 
@@ -84,6 +78,27 @@ Or use the provided script to run both server and client:
 - **Chat Service**: Manages chat functionality
 - **Local Service**: Handles local data persistence
 - **Specialist Service**: Manages specialist-related features
+
+### Troubleshooting
+
+1. If you see "Error: unable to find directory entry in pubspec.yaml: assets/images/":
+   - Create an `assets/images` directory in your project root
+   - Add the directory to your `pubspec.yaml` under the `flutter` section:
+     ```yaml
+     flutter:
+       assets:
+         - assets/images/
+     ```
+
+2. If the WebSocket connection fails:
+   - Ensure the Node.js server is running (`node server.js`)
+   - Check that port 8080 is not in use
+   - Verify that the WebSocket URL is correct (ws://127.0.0.1:8080)
+
+3. If the Flutter app fails to start:
+   - Run `flutter clean`
+   - Run `flutter pub get`
+   - Try running the app again
 
 ## Contributing
 
